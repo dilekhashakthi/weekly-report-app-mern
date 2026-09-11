@@ -20,10 +20,10 @@ const validate = (schema) => {
 
 // Auth validation schemas
 const registerSchema = z.object({
-  name: z.string().trim().min(1, "Name is required"),
+  name: z.string().trim().min(3, "Name is required"),
   email: z.string().trim().email("A valid email is required"),
   password: z.string().min(6, "Password must be at least 6 characters"),
-  role: z.enum(["member", "manager"]).optional(),
+  role: z.enum(["member", "manager"]),
 });
 
 const loginSchema = z.object({

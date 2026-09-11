@@ -38,7 +38,7 @@ function randInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function buildContent(projectId, weekIdx) {
+function buildContent(projectId, weekIdx, weekStart, weekEnd) {
   const numTasks = randInt(2, 4);
   const tasksCompleted = Array.from({ length: numTasks }).map(() => {
     const planned = randInt(60, 100);
@@ -56,6 +56,8 @@ function buildContent(projectId, weekIdx) {
   });
 
   return {
+    weekStart,
+    weekEnd,
     project: projectId,
     tasksCompleted,
     tasksPlannedNextWeek: [randOf(TASK_POOL), randOf(TASK_POOL)],
@@ -135,7 +137,7 @@ const run = async () => {
       const weekStart = mondayWeeksAgo(weekIdx);
       const weekEnd = addDays(weekStart, 4);
       const project = randOf(projects);
-      const content = buildContent(project._id, weekIdx);
+      const content = buildContent(project._id, weekIdx, weekStart, weekEnd);
 
       // eslint-disable-next-line no-await-in-loop
       const report = await Report.create({
@@ -173,7 +175,7 @@ const run = async () => {
           versionNumber: 1,
         });
 
-        const v2Content = buildContent(project._id, weekIdx);
+        const v2Content = buildContent(project._id, weekIdx, weekStart, weekEnd);
         report.project = v2Content.project;
         report.tasksCompleted = v2Content.tasksCompleted;
         report.tasksPlannedNextWeek = v2Content.tasksPlannedNextWeek;

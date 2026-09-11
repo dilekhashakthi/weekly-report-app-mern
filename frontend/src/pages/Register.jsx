@@ -13,6 +13,22 @@ const Register = () => {
   const [serverError, setServerError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
+  const handleSubmit = async (values, { setSubmitting }) => {
+    setServerError('');
+    try {
+      const user = await register(values.name, values.email, values.password);
+      toast.success(`Welcome to Weekly Reports, ${user.name}!`);
+      navigate('/app/history', { replace: true });
+    } catch (error) {
+      const errMsg =
+        error?.data?.message || error?.response?.data?.message || 'Could not create your account.';
+      setServerError(errMsg);
+      toast.error(errMsg);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -20,21 +36,7 @@ const Register = () => {
       password: '',
     },
     validationSchema: registerValidationSchema,
-    onSubmit: async (values, { setSubmitting }) => {
-      setServerError('');
-      try {
-        const user = await register(values.name, values.email, values.password);
-        toast.success(`Welcome to Weekly Reports, ${user.name}!`);
-        navigate('/app/history', { replace: true });
-      } catch (error) {
-        const errMsg =
-          error?.data?.message || error?.response?.data?.message || 'Could not create your account.';
-        setServerError(errMsg);
-        toast.error(errMsg);
-      } finally {
-        setSubmitting(false);
-      }
-    },
+    onSubmit: handleSubmit,
   });
 
   const inputCls =

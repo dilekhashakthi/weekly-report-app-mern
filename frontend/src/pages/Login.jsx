@@ -14,29 +14,31 @@ const Login = () => {
   const [serverError, setServerError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
+  const handleSubmit = async (values, { setSubmitting }) => {
+    setServerError('');
+    try {
+      const user = await login(values.email, values.password);
+      toast.success(`Welcome back, ${user.name}!`);
+      const dest =
+        location.state?.from?.pathname || (user.role === 'manager' ? '/app/dashboard' : '/app/history');
+      navigate(dest, { replace: true });
+    } catch (error) {
+      const errMsg =
+        error?.data?.message || error?.response?.data?.message || 'Could not log in. Check your credentials.';
+      setServerError(errMsg);
+      toast.error(errMsg);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   const formik = useFormik({
     initialValues: {
       email: '',
       password: '',
     },
     validationSchema: loginValidationSchema,
-    onSubmit: async (values, { setSubmitting }) => {
-      setServerError('');
-      try {
-        const user = await login(values.email, values.password);
-        toast.success(`Welcome back, ${user.name}!`);
-        const dest =
-          location.state?.from?.pathname || (user.role === 'manager' ? '/app/dashboard' : '/app/history');
-        navigate(dest, { replace: true });
-      } catch (error) {
-        const errMsg =
-          error?.data?.message || error?.response?.data?.message || 'Could not log in. Check your credentials.';
-        setServerError(errMsg);
-        toast.error(errMsg);
-      } finally {
-        setSubmitting(false);
-      }
-    },
+    onSubmit: handleSubmit,
   });
 
   const inputCls =

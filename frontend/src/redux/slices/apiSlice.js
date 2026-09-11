@@ -6,8 +6,8 @@ export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
     baseUrl,
-    prepareHeaders: (headers, { getState }) => {
-      const token = getState()?.auth?.token || localStorage.getItem('wr_token');
+    prepareHeaders: (headers) => {
+      const token = localStorage.getItem('accessToken');
       if (token) {
         headers.set('Authorization', `Bearer ${token}`);
       }
@@ -23,6 +23,7 @@ export const apiSlice = createApi({
         method: 'POST',
         body: credentials,
       }),
+      invalidatesTags: ['User', 'Dashboard', 'Report'],
     }),
     register: builder.mutation({
       query: (userData) => ({
@@ -30,9 +31,11 @@ export const apiSlice = createApi({
         method: 'POST',
         body: userData,
       }),
+      invalidatesTags: ['User'],
     }),
     getMe: builder.query({
       query: () => '/auth/me',
+      providesTags: ['User'],
     }),
 
     // Report endpoints

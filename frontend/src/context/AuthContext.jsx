@@ -1,70 +1,76 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { setCredentials, logoutUser } from '../redux/slices/authSlice';
-import { useLoginMutation, useRegisterMutation, useLazyGetMeQuery } from '../redux/slices/apiSlice';
+import { useDispatch } from 'react-redux';
+import {
+  apiSlice,
+  useLoginMutation,
+  useRegisterMutation,
+  useGetMeQuery,
+} from '../redux/slices/apiSlice';
 import toast from 'react-hot-toast';
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const dispatch = useDispatch();
-  const reduxUser = useSelector((state) => state.auth.user);
-  const [loading, setLoading] = useState(true);
+  const [token, setToken] = useState(() => localStorage.getItem('accessToken'));
 
-  const [triggerGetMe] = useLazyGetMeQuery();
+  const {
+    data: meData,
+    isLoading,
+    isFetching,
+    isError,
+  } = useGetMeQuery(undefined, {
+    skip: !token,
+  });
+
+  useEffect(() => {
+    if (isError) {
+      localStorage.removeItem('accessToken');
+      setToken(null);
+      dispatch(apiSlice.util.resetApiState());
+    }
+  }, [isError, dispatch]);
+
   const [loginMutation] = useLoginMutation();
   const [registerMutation] = useRegisterMutation();
 
-  useEffect(() => {
-    const token = localStorage.getItem('wr_token');
-    if (!token) {
-      setLoading(false);
-      return;
-    }
-
-    triggerGetMe()
-      .unwrap()
-      .then((res) => {
-        dispatch(setCredentials({ user: res.user, token }));
-      })
-      .catch(() => {
-        dispatch(logoutUser());
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [triggerGetMe, dispatch]);
+  const user = token ? meData?.user || null : null;
+  const loading = Boolean(token && (isLoading || (isFetching && !user)));
 
   const login = useCallback(
     async (email, password) => {
       const res = await loginMutation({ email, password }).unwrap();
-      dispatch(setCredentials({ user: res.user, token: res.token }));
+      localStorage.setItem('accessToken', res.token);
+      setToken(res.token);
       return res.user;
     },
-    [loginMutation, dispatch]
+    [loginMutation]
   );
 
   const register = useCallback(
     async (name, email, password) => {
       const res = await registerMutation({ name, email, password }).unwrap();
-      dispatch(setCredentials({ user: res.user, token: res.token }));
+      localStorage.setItem('accessToken', res.token);
+      setToken(res.token);
       return res.user;
     },
-    [registerMutation, dispatch]
+    [registerMutation]
   );
 
   const logout = useCallback(() => {
-    dispatch(logoutUser());
+    localStorage.removeItem('accessToken');
+    setToken(null);
+    dispatch(apiSlice.util.resetApiState());
     toast.success('Signed out successfully');
   }, [dispatch]);
 
   const value = {
-    user: reduxUser,
+    user,
     loading,
     login,
     register,
     logout,
-    isManager: reduxUser?.role === 'manager',
+    isManager: user?.role === 'manager',
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
