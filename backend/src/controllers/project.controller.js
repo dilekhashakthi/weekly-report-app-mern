@@ -1,6 +1,6 @@
 const Project = require("../models/Project");
 
-// GET /api/projects
+// GET /api/v1/projects
 const listProjects = async (req, res, next) => {
   try {
     const { activeOnly } = req.query;
@@ -12,7 +12,7 @@ const listProjects = async (req, res, next) => {
   }
 };
 
-// POST /api/projects (manager only)
+// POST /api/v1/projects (manager only)
 const createProject = async (req, res, next) => {
   try {
     const { name, description, members } = req.body;
@@ -28,7 +28,7 @@ const createProject = async (req, res, next) => {
   }
 };
 
-// PATCH /api/projects/:id (manager only)
+// PATCH /api/v1/projects/:id (manager only)
 const updateProject = async (req, res, next) => {
   try {
     const { name, description, isActive, members } = req.body;
@@ -48,7 +48,7 @@ const updateProject = async (req, res, next) => {
   }
 };
 
-// DELETE /api/projects/:id (manager only)
+// DELETE /api/v1/projects/:id (manager only)
 const deleteProject = async (req, res, next) => {
   try {
     const project = await Project.findByIdAndDelete(req.params.id);

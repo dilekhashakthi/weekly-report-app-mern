@@ -62,3 +62,32 @@ export const reviewValidationSchema = Yup.object({
     otherwise: (schema) => schema.optional(),
   }),
 });
+
+export const profileValidationSchema = Yup.object({
+  name: Yup.string()
+    .trim()
+    .min(2, 'Name must be at least 2 characters')
+    .required('Full name is required'),
+  email: Yup.string()
+    .email('Invalid email address')
+    .required('Email is required'),
+  currentPassword: Yup.string().when('newPassword', {
+    is: (value) => Boolean(value && value.length > 0),
+    then: (schema) => schema.required('Current password is required to set a new password'),
+    otherwise: (schema) => schema.optional(),
+  }),
+  newPassword: Yup.string().test(
+    'len',
+    'New password must be at least 6 characters',
+    (value) => !value || value.length >= 6
+  ),
+  confirmPassword: Yup.string().when('newPassword', {
+    is: (value) => Boolean(value && value.length > 0),
+    then: (schema) =>
+      schema
+        .oneOf([Yup.ref('newPassword')], 'Passwords must match')
+        .required('Please confirm your new password'),
+    otherwise: (schema) => schema.optional(),
+  }),
+});
+

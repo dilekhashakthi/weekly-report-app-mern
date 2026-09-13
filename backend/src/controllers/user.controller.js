@@ -1,6 +1,6 @@
 const User = require("../models/User");
 
-// GET /api/users (manager only)
+// GET /api/v1/users (manager only)
 const listUsers = async (req, res, next) => {
   try {
     const users = await User.find().sort({ createdAt: -1 });
@@ -10,7 +10,7 @@ const listUsers = async (req, res, next) => {
   }
 };
 
-// POST /api/users (manager only)
+// POST /api/v1/users (manager only)
 const createUser = async (req, res, next) => {
   try {
     const { name, email, password, role } = req.body;
@@ -32,7 +32,7 @@ const createUser = async (req, res, next) => {
   }
 };
 
-// PATCH /api/users/:id (manager only)
+// PATCH /api/v1/users/:id (manager only)
 const updateUser = async (req, res, next) => {
   try {
     const { role, isActive, name } = req.body;
@@ -50,7 +50,7 @@ const updateUser = async (req, res, next) => {
   }
 };
 
-// DELETE /api/users/:id (manager only)
+// DELETE /api/v1/users/:id (manager only)
 const deleteUser = async (req, res, next) => {
   try {
     if (req.params.id === String(req.user._id)) {

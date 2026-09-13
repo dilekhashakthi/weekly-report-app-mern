@@ -27,6 +27,7 @@ import {
 const memberLinks = [
   { to: '/app/report', label: 'My Report', icon: FiFileText },
   { to: '/app/history', label: 'Report History', icon: FiClock },
+  { to: '/app/profile', label: 'My Profile', icon: FiUser },
 ];
 
 const managerLinks = [
@@ -34,7 +35,9 @@ const managerLinks = [
   { to: '/app/review-queue', label: 'Review Queue', icon: FiInbox },
   { to: '/app/projects', label: 'Projects', icon: FiFolder },
   { to: '/app/users', label: 'Team Members', icon: FiUsers },
+  { to: '/app/profile', label: 'My Profile', icon: FiUser },
 ];
+
 
 const initials = (name = '') => {
   return name
@@ -102,15 +105,20 @@ const AppLayout = () => {
         {nav}
 
         <div className="mt-auto border-t border-white/10 px-5 pt-4">
-          <div className="flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-accent text-xs font-semibold text-white">
+          <NavLink
+            to="/app/profile"
+            className="flex items-center gap-3 rounded-lg p-1.5 transition-colors hover:bg-white/5"
+            title="View profile"
+          >
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-semibold text-white">
               {initials(user?.name) || <FiUser />}
             </div>
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-medium text-white">{user?.name}</p>
+              <p className="truncate text-sm font-medium text-white hover:text-accent-light">{user?.name}</p>
               <p className="truncate text-xs text-white/40 font-inter">{user?.email}</p>
             </div>
-          </div>
+          </NavLink>
+
           <button
             onClick={() => setLogoutOpen(true)}
             className="mt-3 flex w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-white/10 px-3 py-2 text-xs font-medium text-white/70 transition-colors hover:bg-white/5 hover:text-white"

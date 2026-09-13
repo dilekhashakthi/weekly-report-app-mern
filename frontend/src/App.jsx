@@ -15,6 +15,7 @@ import ReviewQueue from './pages/ReviewQueue';
 import TeamMemberProfile from './pages/TeamMemberProfile';
 import ProjectManagement from './pages/ProjectManagement';
 import UserManagement from './pages/UserManagement';
+import Profile from './pages/Profile';
 
 function RoleHome() {
   const { user } = useAuth();
@@ -38,6 +39,9 @@ const App = () => {
         >
           <Route index element={<RoleHome />} />
 
+          {/* Profile page */}
+          <Route path="profile" element={<Profile />} />
+
           {/* Member pages */}
           <Route path="report" element={<ProtectedRoute roles={['member']}><MyReportPage /></ProtectedRoute>} />
           <Route path="history" element={<ProtectedRoute roles={['member']}><ReportHistory /></ProtectedRoute>} />
@@ -52,6 +56,7 @@ const App = () => {
           <Route path="projects" element={<ProtectedRoute roles={['manager']}><ProjectManagement /></ProtectedRoute>} />
           <Route path="users" element={<ProtectedRoute roles={['manager']}><UserManagement /></ProtectedRoute>} />
         </Route>
+
 
         <Route path="/" element={<Navigate to="/app" replace />} />
         <Route path="*" element={<Navigate to="/app" replace />} />

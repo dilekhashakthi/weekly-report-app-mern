@@ -19,7 +19,7 @@ export const apiSlice = createApi({
     // Auth endpoints
     login: builder.mutation({
       query: (credentials) => ({
-        url: '/auth/login',
+        url: '/v1/auth/login',
         method: 'POST',
         body: credentials,
       }),
@@ -27,36 +27,44 @@ export const apiSlice = createApi({
     }),
     register: builder.mutation({
       query: (userData) => ({
-        url: '/auth/register',
+        url: '/v1/auth/register',
         method: 'POST',
         body: userData,
       }),
       invalidatesTags: ['User'],
     }),
     getMe: builder.query({
-      query: () => '/auth/me',
+      query: () => '/v1/auth/me',
       providesTags: ['User'],
+    }),
+    updateProfile: builder.mutation({
+      query: (body) => ({
+        url: '/v1/auth/profile',
+        method: 'PATCH',
+        body,
+      }),
+      invalidatesTags: ['User'],
     }),
 
     // Report endpoints
     getReports: builder.query({
       query: (params = {}) => ({
-        url: '/reports',
+        url: '/v1/reports',
         params,
       }),
       providesTags: ['Report'],
     }),
     getReportById: builder.query({
-      query: (id) => `/reports/${id}`,
+      query: (id) => `/v1/reports/${id}`,
       providesTags: (result, error, id) => [{ type: 'Report', id }],
     }),
     getReportVersions: builder.query({
-      query: (id) => `/reports/${id}/versions`,
+      query: (id) => `/v1/reports/${id}/versions`,
       providesTags: (result, error, id) => [{ type: 'Report', id: `${id}-versions` }],
     }),
     createReport: builder.mutation({
       query: (body) => ({
-        url: '/reports',
+        url: '/v1/reports',
         method: 'POST',
         body,
       }),
@@ -64,7 +72,7 @@ export const apiSlice = createApi({
     }),
     updateReport: builder.mutation({
       query: ({ id, ...patch }) => ({
-        url: `/reports/${id}`,
+        url: `/v1/reports/${id}`,
         method: 'PATCH',
         body: patch,
       }),
@@ -72,21 +80,21 @@ export const apiSlice = createApi({
     }),
     deleteReport: builder.mutation({
       query: (id) => ({
-        url: `/reports/${id}`,
+        url: `/v1/reports/${id}`,
         method: 'DELETE',
       }),
       invalidatesTags: ['Report', 'Dashboard'],
     }),
     submitReport: builder.mutation({
       query: (id) => ({
-        url: `/reports/${id}/submit`,
+        url: `/v1/reports/${id}/submit`,
         method: 'POST',
       }),
       invalidatesTags: (result, error, id) => ['Report', 'Dashboard', { type: 'Report', id }],
     }),
     reviewReport: builder.mutation({
       query: ({ id, ...body }) => ({
-        url: `/reports/${id}/review`,
+        url: `/v1/reports/${id}/review`,
         method: 'POST',
         body,
       }),
@@ -96,14 +104,14 @@ export const apiSlice = createApi({
     // Project endpoints
     getProjects: builder.query({
       query: (params = {}) => ({
-        url: '/projects',
+        url: '/v1/projects',
         params,
       }),
       providesTags: ['Project'],
     }),
     createProject: builder.mutation({
       query: (body) => ({
-        url: '/projects',
+        url: '/v1/projects',
         method: 'POST',
         body,
       }),
@@ -111,7 +119,7 @@ export const apiSlice = createApi({
     }),
     updateProject: builder.mutation({
       query: ({ id, ...patch }) => ({
-        url: `/projects/${id}`,
+        url: `/v1/projects/${id}`,
         method: 'PATCH',
         body: patch,
       }),
@@ -119,7 +127,7 @@ export const apiSlice = createApi({
     }),
     deleteProject: builder.mutation({
       query: (id) => ({
-        url: `/projects/${id}`,
+        url: `/v1/projects/${id}`,
         method: 'DELETE',
       }),
       invalidatesTags: ['Project', 'Dashboard'],
@@ -127,12 +135,12 @@ export const apiSlice = createApi({
 
     // User endpoints
     getUsers: builder.query({
-      query: () => '/users',
+      query: () => '/v1/users',
       providesTags: ['User'],
     }),
     createUser: builder.mutation({
       query: (body) => ({
-        url: '/users',
+        url: '/v1/users',
         method: 'POST',
         body,
       }),
@@ -140,7 +148,7 @@ export const apiSlice = createApi({
     }),
     updateUser: builder.mutation({
       query: ({ id, ...patch }) => ({
-        url: `/users/${id}`,
+        url: `/v1/users/${id}`,
         method: 'PATCH',
         body: patch,
       }),
@@ -148,7 +156,7 @@ export const apiSlice = createApi({
     }),
     deleteUser: builder.mutation({
       query: (id) => ({
-        url: `/users/${id}`,
+        url: `/v1/users/${id}`,
         method: 'DELETE',
       }),
       invalidatesTags: ['User', 'Dashboard'],
@@ -157,42 +165,42 @@ export const apiSlice = createApi({
     // Dashboard endpoints
     getDashboardSummary: builder.query({
       query: (params = {}) => ({
-        url: '/dashboard/summary',
+        url: '/v1/dashboard/summary',
         params,
       }),
       providesTags: ['Dashboard'],
     }),
     getStatusByMember: builder.query({
       query: (params = {}) => ({
-        url: '/dashboard/status-by-member',
+        url: '/v1/dashboard/status-by-member',
         params,
       }),
       providesTags: ['Dashboard'],
     }),
     getTasksTrend: builder.query({
       query: (params = {}) => ({
-        url: '/dashboard/tasks-trend',
+        url: '/v1/dashboard/tasks-trend',
         params,
       }),
       providesTags: ['Dashboard'],
     }),
     getWorkloadByProject: builder.query({
       query: (params = {}) => ({
-        url: '/dashboard/workload-by-project',
+        url: '/v1/dashboard/workload-by-project',
         params,
       }),
       providesTags: ['Dashboard'],
     }),
     getTimeByType: builder.query({
       query: (params = {}) => ({
-        url: '/dashboard/time-by-type',
+        url: '/v1/dashboard/time-by-type',
         params,
       }),
       providesTags: ['Dashboard'],
     }),
     getDashboardActivity: builder.query({
       query: (params = {}) => ({
-        url: '/dashboard/activity',
+        url: '/v1/dashboard/activity',
         params,
       }),
       providesTags: ['Dashboard'],
@@ -205,6 +213,7 @@ export const {
   useRegisterMutation,
   useGetMeQuery,
   useLazyGetMeQuery,
+  useUpdateProfileMutation,
   useGetReportsQuery,
   useGetReportByIdQuery,
   useGetReportVersionsQuery,

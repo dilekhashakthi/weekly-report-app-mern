@@ -115,6 +115,13 @@ const updateUserSchema = z.object({
   isActive: z.boolean().optional(),
 });
 
+const updateProfileSchema = z.object({
+  name: z.string().trim().min(2, "Name must be at least 2 characters").max(100).optional(),
+  email: z.string().trim().email("A valid email is required").optional(),
+  currentPassword: z.string().optional(),
+  newPassword: z.string().min(6, "New password must be at least 6 characters").optional(),
+});
+
 module.exports = {
   validate,
   registerSchema,
@@ -126,4 +133,6 @@ module.exports = {
   reviewReportSchema,
   createUserSchema,
   updateUserSchema,
+  updateProfileSchema,
 };
+

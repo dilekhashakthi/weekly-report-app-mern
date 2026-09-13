@@ -21,16 +21,16 @@ const router = express.Router();
 
 router.use(protect);
 
-// GET /api/reports
+// GET /api/v1/reports
 router.get("/", listReports);
 
-// GET /api/reports/:id
+// GET /api/v1/reports/:id
 router.get("/:id", getReport);
 
-// GET /api/reports/:id/versions
+// GET /api/v1/reports/:id/versions
 router.get("/:id/versions", getVersions);
 
-// POST /api/reports
+// POST /api/v1/reports
 router.post(
   "/",
   authorize("member"),
@@ -38,7 +38,7 @@ router.post(
   createReport,
 );
 
-// PATCH /api/reports/:id
+// PATCH /api/v1/reports/:id
 router.patch(
   "/:id",
   authorize("member"),
@@ -46,13 +46,13 @@ router.patch(
   updateReport,
 );
 
-// DELETE /api/reports/:id
+// DELETE /api/v1/reports/:id
 router.delete("/:id", authorize("member"), deleteReport);
 
-// POST /api/reports/:id/submit
+// POST /api/v1/reports/:id/submit
 router.post("/:id/submit", authorize("member"), submitReport);
 
-// POST /api/reports/:id/review
+// POST /api/v1/reports/:id/review
 router.post(
   "/:id/review",
   authorize("manager"),

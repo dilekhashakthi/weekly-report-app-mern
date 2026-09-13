@@ -11,7 +11,7 @@ const startOfWeek = (date = new Date()) => {
   return d;
 };
 
-// GET /api/dashboard/summary?week=YYYY-MM-DD  (manager only)
+// GET /api/v1/dashboard/summary?week=YYYY-MM-DD  (manager only)
 const getSummary = async (req, res, next) => {
   try {
     const week = req.query.week ? new Date(req.query.week) : startOfWeek();
@@ -59,7 +59,7 @@ const getSummary = async (req, res, next) => {
   }
 };
 
-// GET /api/dashboard/status-by-member?week=YYYY-MM-DD (manager only)
+// GET /api/v1/dashboard/status-by-member?week=YYYY-MM-DD (manager only)
 const getStatusByMember = async (req, res, next) => {
   try {
     const week = req.query.week ? new Date(req.query.week) : startOfWeek();
@@ -89,7 +89,7 @@ const getStatusByMember = async (req, res, next) => {
   }
 };
 
-// GET /api/dashboard/tasks-trend?weeks=8&member=<id> (manager only)
+// GET /api/v1/dashboard/tasks-trend?weeks=8&member=<id> (manager only)
 const getTasksTrend = async (req, res, next) => {
   try {
     const numWeeks = Math.min(parseInt(req.query.weeks, 10) || 8, 26);
@@ -122,7 +122,7 @@ const getTasksTrend = async (req, res, next) => {
   }
 };
 
-// GET /api/dashboard/workload-by-project?week=YYYY-MM-DD (manager only)
+// GET /api/v1/dashboard/workload-by-project?week=YYYY-MM-DD (manager only)
 const getWorkloadByProject = async (req, res, next) => {
   try {
     const week = req.query.week ? new Date(req.query.week) : startOfWeek();
@@ -154,7 +154,7 @@ const getWorkloadByProject = async (req, res, next) => {
   }
 };
 
-// GET /api/dashboard/time-by-type?week=YYYY-MM-DD (manager only)
+// GET /api/v1/dashboard/time-by-type?week=YYYY-MM-DD (manager only)
 const getTimeByType = async (req, res, next) => {
   try {
     const week = req.query.week ? new Date(req.query.week) : startOfWeek();
@@ -184,7 +184,7 @@ const getTimeByType = async (req, res, next) => {
   }
 };
 
-// GET /api/dashboard/activity?limit=15 (manager only)
+// GET /api/v1/dashboard/activity?limit=15 (manager only)
 const getActivityFeed = async (req, res, next) => {
   try {
     const limit = Math.min(parseInt(req.query.limit, 10) || 15, 50);

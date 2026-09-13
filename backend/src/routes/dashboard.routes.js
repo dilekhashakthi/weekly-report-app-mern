@@ -13,22 +13,22 @@ const router = express.Router();
 
 router.use(protect, authorize("manager"));
 
-// GET /api/dashboard/summary
+// GET /api/v1/dashboard/summary
 router.get("/summary", getSummary);
 
-// GET /api/dashboard/status-by-member
+// GET /api/v1/dashboard/status-by-member
 router.get("/status-by-member", getStatusByMember);
 
-// GET /api/dashboard/tasks-trend
+// GET /api/v1/dashboard/tasks-trend
 router.get("/tasks-trend", getTasksTrend);
 
-// GET /api/dashboard/workload-by-project
+// GET /api/v1/dashboard/workload-by-project
 router.get("/workload-by-project", getWorkloadByProject);
 
-// GET /api/dashboard/time-by-type
+// GET /api/v1/dashboard/time-by-type
 router.get("/time-by-type", getTimeByType);
 
-// GET /api/dashboard/activity
+// GET /api/v1/dashboard/activity
 router.get("/activity", getActivityFeed);
 
 module.exports = router;

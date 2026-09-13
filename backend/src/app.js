@@ -13,18 +13,19 @@ const createApp = () => {
   const app = express();
 
   app.use(
-    cors({ origin: process.env.CLIENT_ORIGIN || "*", credentials: true }),
+    cors({ origin: process.env.CLIENT_ORIGIN, credentials: true }),
   );
   app.use(express.json({ limit: "1mb" }));
   app.use(morgan("dev"));
 
-  app.get("/api/health", (req, res) => res.json({ status: "ok" }));
+  app.get("/api/v1/health", (req, res) => res.json({ status: "ok" }));
 
-  app.use("/api/auth", authRoutes);
-  app.use("/api/users", userRoutes);
-  app.use("/api/projects", projectRoutes);
-  app.use("/api/reports", reportRoutes);
-  app.use("/api/dashboard", dashboardRoutes);
+  // API v1 routes
+  app.use("/api/v1/auth", authRoutes);
+  app.use("/api/v1/users", userRoutes);
+  app.use("/api/v1/projects", projectRoutes);
+  app.use("/api/v1/reports", reportRoutes);
+  app.use("/api/v1/dashboard", dashboardRoutes);
 
   app.use(notFound);
   app.use(errorHandler);

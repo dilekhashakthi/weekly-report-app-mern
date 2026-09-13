@@ -16,10 +16,10 @@ const router = express.Router();
 
 router.use(protect);
 
-// GET /api/projects
+// GET /api/v1/projects
 router.get("/", listProjects);
 
-// POST /api/projects
+// POST /api/v1/projects
 router.post(
   "/",
   authorize("manager"),
@@ -27,7 +27,7 @@ router.post(
   createProject,
 );
 
-// PATCH /api/projects/:id
+// PATCH /api/v1/projects/:id
 router.patch(
   "/:id",
   authorize("manager"),
@@ -35,7 +35,7 @@ router.patch(
   updateProject,
 );
 
-// DELETE /api/projects/:id
+// DELETE /api/v1/projects/:id
 router.delete("/:id", authorize("manager"), deleteProject);
 
 module.exports = router;

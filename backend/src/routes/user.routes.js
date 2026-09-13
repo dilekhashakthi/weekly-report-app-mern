@@ -16,16 +16,16 @@ const router = express.Router();
 
 router.use(protect, authorize("manager"));
 
-// GET /api/users
+// GET /api/v1/users
 router.get("/", listUsers);
 
-// POST /api/users
+// POST /api/v1/users
 router.post("/", validate(createUserSchema), createUser);
 
-// PATCH /api/users/:id
+// PATCH /api/v1/users/:id
 router.patch("/:id", validate(updateUserSchema), updateUser);
 
-// DELETE /api/users/:id
+// DELETE /api/v1/users/:id
 router.delete("/:id", deleteUser);
 
 module.exports = router;

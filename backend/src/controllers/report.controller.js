@@ -26,7 +26,7 @@ const canEditContent = (report, user) => {
   return ["draft", "needs_correction"].includes(report.status);
 };
 
-// GET /api/reports
+// GET /api/v1/reports
 const listReports = async (req, res, next) => {
   try {
     const {
@@ -86,7 +86,7 @@ const listReports = async (req, res, next) => {
   }
 };
 
-// GET /api/reports/:id
+// GET /api/v1/reports/:id
 const getReport = async (req, res, next) => {
   try {
     const report = await Report.findById(req.params.id)
@@ -111,7 +111,7 @@ const getReport = async (req, res, next) => {
   }
 };
 
-// POST /api/reports (member only)
+// POST /api/v1/reports (member only)
 const createReport = async (req, res, next) => {
   try {
     const { weekStart, weekEnd, project } = req.body;
@@ -152,7 +152,7 @@ const createReport = async (req, res, next) => {
   }
 };
 
-// PATCH /api/reports/:id  (owner only, draft/needs_correction only)
+// PATCH /api/v1/reports/:id  (owner only, draft/needs_correction only)
 const updateReport = async (req, res, next) => {
   try {
     const report = await Report.findById(req.params.id);
@@ -178,7 +178,7 @@ const updateReport = async (req, res, next) => {
   }
 };
 
-// DELETE /api/reports/:id (owner only, draft only)
+// DELETE /api/v1/reports/:id (owner only, draft only)
 const deleteReport = async (req, res, next) => {
   try {
     const report = await Report.findById(req.params.id);
@@ -200,7 +200,7 @@ const deleteReport = async (req, res, next) => {
   }
 };
 
-// POST /api/reports/:id/submit (owner only)
+// POST /api/v1/reports/:id/submit (owner only)
 const submitReport = async (req, res, next) => {
   try {
     const report = await Report.findById(req.params.id);
@@ -248,7 +248,7 @@ const submitReport = async (req, res, next) => {
   }
 };
 
-// GET /api/reports/:id/versions
+// GET /api/v1/reports/:id/versions
 const getVersions = async (req, res, next) => {
   try {
     const report = await Report.findById(req.params.id).populate(
@@ -275,7 +275,7 @@ const getVersions = async (req, res, next) => {
   }
 };
 
-// POST /api/reports/:id/review (manager only)
+// POST /api/v1/reports/:id/review (manager only)
 const reviewReport = async (req, res, next) => {
   try {
     const { action, comment } = req.body;
